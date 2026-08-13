@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://jkexamspark-backend.up.railway.app/:path*"
+    }
+  ]
+}
