@@ -57,7 +57,7 @@ export default function ScoresVerificationPage() {
                     Failed to load pending scores. Please try again.
                   </td>
                 </tr>
-              ) : scoresData?.scores?.length === 0 ? (
+              ) : scoresData?.data?.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                     <CheckCircle className="w-8 h-8 mx-auto mb-2 text-green-500 opacity-50" />
@@ -65,7 +65,7 @@ export default function ScoresVerificationPage() {
                   </td>
                 </tr>
               ) : (
-                scoresData?.scores?.map((score: any) => (
+                scoresData?.data?.map((score: any) => (
                   <tr key={score.id} className="hover:bg-gray-50 dark:hover:bg-gray-750/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900 dark:text-white">{score.user?.fullName || 'Unknown User'}</div>
