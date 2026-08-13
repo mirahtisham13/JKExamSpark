@@ -202,7 +202,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex flex-col items-end">
                       <span className="font-bold text-lg">{sub.marks_obtained}</span>
-                      <Badge variant={sub.verification_status === 'verified' ? 'green' : sub.verification_status === 'rejected' ? 'red' : 'yellow'} className="mt-1 scale-90 origin-right">
+                      <Badge variant={sub.verification_status === 'VERIFIED' ? 'green' : sub.verification_status === 'REJECTED' ? 'red' : 'yellow'} className="mt-1 scale-90 origin-right">
                         {sub.verification_status}
                       </Badge>
                     </div>
@@ -252,10 +252,10 @@ export default function DashboardPage() {
                 dashboard.announcements.map(ann => (
                   <div key={ann.id} className="p-5 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                     <div className="flex items-center justify-between mb-2">
-                      <Badge variant={ann.announcement_type === 'important' ? 'red' : 'blue'} className="text-[10px]">
-                        {ann.announcement_type.toUpperCase()}
+                      <Badge variant={ann.type === 'WARNING' ? 'red' : ann.type === 'SUCCESS' ? 'green' : 'blue'} className="text-[10px]">
+                        {ann.type}
                       </Badge>
-                      <span className="text-xs text-gray-400">{formatDate(ann.published_at)}</span>
+                      <span className="text-xs text-gray-400">{formatDate(ann.created_at)}</span>
                     </div>
                     <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-tight mb-1">{ann.title}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{ann.content}</p>

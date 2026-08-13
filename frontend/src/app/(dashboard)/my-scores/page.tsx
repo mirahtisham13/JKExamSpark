@@ -41,7 +41,7 @@ export default function MyScoresPage() {
 
   const { data: submissions, isLoading } = useMySubmissions();
   const { data: exams } = useExams();
-  const { data: categories } = useCategories(filterExam ? parseInt(filterExam) : undefined);
+
   
   const { mutateAsync: submitScore, isPending: isSubmitting } = useSubmitScore();
   const { mutateAsync: editScore, isPending: isEditing } = useEditScore();
@@ -52,10 +52,14 @@ export default function MyScoresPage() {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<ScoreFormValues>({
     resolver: zodResolver(scoreSchema),
   });
+
+  const selectedExamId = watch('exam_id');
+  const { data: categories } = useCategories(selectedExamId);
 
   const openEditModal = (score: ExamScoreSubmission) => {
     setEditingScore(score);
@@ -165,8 +169,8 @@ export default function MyScoresPage() {
                         variant="outline" 
                         size="sm" 
                         onClick={() => openEditModal(sub)}
-                        disabled={sub.verification_status === 'verified'}
-                        title={sub.verification_status === 'verified' ? "Verified scores cannot be edited" : ""}
+                        disabled={sub.verification_status === 'VERIFIED'}
+                        title={sub.verification_status === 'VERIFIED' ? "Verified scores cannot be edited" : ""}
                       >
                         <Edit2 className="w-4 h-4 mr-1.5" /> Edit
                       </Button>

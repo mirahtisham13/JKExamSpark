@@ -9,21 +9,21 @@ export function useExams() {
   });
 }
 
-export function useSubjects(examId?: number) {
+export function useSubjects(examId?: string) {
   return useQuery({
     queryKey: ['subjects', examId],
     queryFn: () => get<Subject[]>('/subjects/', { exam_id: examId }),
   });
 }
 
-export function useTopics(subjectId?: number) {
+export function useTopics(subjectId?: string) {
   return useQuery({
     queryKey: ['topics', subjectId],
     queryFn: () => get<Topic[]>('/topics/', { subject_id: subjectId }),
   });
 }
 
-export function useCategories(examId?: number) {
+export function useCategories(examId?: string) {
   return useQuery({
     queryKey: ['categories', examId],
     queryFn: () => get<any[]>('/categories/', { exam_id: examId }),

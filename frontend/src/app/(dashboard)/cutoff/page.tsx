@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { AlertTriangle, Info, CheckCircle, ShieldAlert, Target, Users, MinusCircle, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, Info, CheckCircle, ShieldAlert, Target, Users, MinusCircle, ShieldCheck, Calculator } from 'lucide-react';
 import { get } from '@/lib/api';
 import { useCutoffs } from '@/hooks/useCutoff';
 import { Spinner } from '@/components/ui/Spinner';
@@ -70,25 +70,28 @@ export default function CutoffPredictorPage() {
       </div>
 
       {!selectedExamId ? (
-        <EmptyState icon="target" title="Select an exam" description="Choose an exam from the dropdown to view cutoff predictions." />
+        <EmptyState icon="search" title="Select an exam" description="Choose an exam from the dropdown to view cutoff predictions." />
       ) : cutoffsLoading ? (
         <div className="p-12 flex justify-center"><Spinner /></div>
       ) : cutoffData ? (
         <div className="space-y-10">
           
           {/* Official Cutoffs */}
-          {cutoffData.official_cutoffs.length > 0 && (
+          {(cutoffData.official || []).length > 0 && (
             <div>
               <h2 className="text-xl font-bold mb-4 flex items-center text-green-700 dark:text-green-500">
                 <ShieldCheck className="w-6 h-6 mr-2" /> Official JKSSB Cutoffs
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {cutoffData.official_cutoffs.map(oc => (
-                  <div key={oc.id} className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-5 shadow-sm relative overflow-hidden">
-                    <div className="text-green-800 dark:text-green-400 font-bold text-lg mb-1">{oc.category_name}</div>
-                    <div className="text-3xl font-black text-green-900 dark:text-green-300">{oc.cutoff_marks.toFixed(2)}</div>
-                    <div className="mt-3 text-xs text-green-700 dark:text-green-500 flex items-center">
-                      <CheckCircle className="w-3 h-3 mr-1" /> Published {new Date(oc.published_at).toLocaleDateString()}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                {(cutoffData.official || []).map(oc => (
+                  <div key={oc.category} className="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-3 opacity-10">
+                      <ShieldCheck className="w-16 h-16" />
+                    </div>
+                    <h3 className="text-sm font-semibold text-green-800 dark:text-green-400 uppercase tracking-wider mb-2">{oc.category}</h3>
+                    <div className="flex items-end space-x-2">
+                      <span className="text-4xl font-extrabold text-green-900 dark:text-green-100">{oc.cutoff_marks}</span>
+                      <span className="text-green-700 dark:text-green-500 mb-1 font-medium">Marks</span>
                     </div>
                   </div>
                 ))}
@@ -98,22 +101,20 @@ export default function CutoffPredictorPage() {
 
           {/* Estimated Cutoffs */}
           <div>
-            <h2 className="text-xl font-bold mb-4 flex items-center text-primary">
-              <Target className="w-6 h-6 mr-2" /> Estimated Cutoffs (Platform Data)
+            <h2 className="text-xl font-bold mb-4 flex items-center text-blue-900 dark:text-blue-100">
+              <Calculator className="w-6 h-6 mr-2" /> Estimated Cutoff Predictions
             </h2>
             
-            {cutoffData.estimated_cutoffs.length === 0 ? (
-              <div className="bg-white dark:bg-gray-900 rounded-xl p-8 border border-gray-100 dark:border-gray-800 text-center">
-                <p className="text-gray-500">Not enough data to calculate estimates for any category yet.</p>
-              </div>
+            {(cutoffData.estimates || []).length === 0 ? (
+              <EmptyState icon="search" title="No estimates available" description="Not enough student scores have been submitted to generate reliable cutoff estimates for this exam." />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {cutoffData.estimated_cutoffs.map(est => (
-                  <div key={est.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+                {(cutoffData.estimates || []).map(est => (
+                  <div key={est.category} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
                     <div className="p-5 border-b border-gray-50 dark:border-gray-800 flex justify-between items-start">
-                      <div className="font-bold text-xl">{est.category_name}</div>
-                      <div className={`px-2.5 py-1 rounded text-xs font-bold border ${getConfidenceColor(est.confidence_level)}`}>
-                        {est.confidence_level} CONFIDENCE
+                      <div className="font-bold text-xl">{est.category}</div>
+                      <div className={`px-2.5 py-1 rounded text-xs font-bold border ${getConfidenceColor(est.confidence)}`}>
+                        {est.confidence} CONFIDENCE
                       </div>
                     </div>
                     <div className="p-5 bg-gray-50/50 dark:bg-gray-800/20">
@@ -130,7 +131,7 @@ export default function CutoffPredictorPage() {
                       <div>
                         <div className="text-gray-500 flex items-center"><Target className="w-4 h-4 mr-1.5" /> Calculated</div>
                         <div className="font-medium mt-1 text-gray-900 dark:text-gray-200">
-                          {new Date(est.calculated_at).toLocaleDateString()}
+                          Recently
                         </div>
                       </div>
                     </div>
@@ -141,7 +142,7 @@ export default function CutoffPredictorPage() {
           </div>
 
           {/* Insufficient Data */}
-          {cutoffData.insufficient_data_categories.length > 0 && (
+          {(cutoffData.insufficient_data_categories || []).length > 0 && (
             <div className="bg-gray-50 dark:bg-gray-800/30 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
               <h3 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center mb-2">
                 <MinusCircle className="w-5 h-5 mr-2 text-gray-400" /> Insufficient Data
@@ -150,7 +151,7 @@ export default function CutoffPredictorPage() {
                 The following categories have fewer than 10 submitted scores. An estimate cannot be reliably calculated yet:
               </p>
               <div className="flex flex-wrap gap-2">
-                {cutoffData.insufficient_data_categories.map(cat => (
+                {(cutoffData.insufficient_data_categories || []).map(cat => (
                   <Badge key={cat} variant="gray">{cat}</Badge>
                 ))}
               </div>

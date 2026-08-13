@@ -80,14 +80,14 @@ export default function UsersPage() {
                     Failed to load users. Please try again.
                   </td>
                 </tr>
-              ) : usersData?.users?.length === 0 ? (
+              ) : usersData?.data?.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                     No users found.
                   </td>
                 </tr>
               ) : (
-                usersData?.users?.map((user: any) => (
+                usersData?.data?.map((user: any) => (
                   <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-750/50 transition-colors">
                     <td className="px-6 py-4">
                       <div>
@@ -147,8 +147,8 @@ export default function UsersPage() {
           </table>
         </div>
         
-        {/* Pagination placeholder if needed */}
-        {usersData?.totalPages > 1 && (
+        {/* Pagination */}
+        {(usersData?.total_pages || 0) > 1 && (
           <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
@@ -158,11 +158,11 @@ export default function UsersPage() {
               Previous
             </button>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Page {page} of {usersData.totalPages}
+              Page {page} of {usersData?.total_pages || 1}
             </span>
             <button
-              onClick={() => setPage(p => Math.min(usersData.totalPages, p + 1))}
-              disabled={page === usersData.totalPages}
+              onClick={() => setPage(p => Math.min(usersData?.total_pages || 1, p + 1))}
+              disabled={page === (usersData?.total_pages || 1)}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               Next

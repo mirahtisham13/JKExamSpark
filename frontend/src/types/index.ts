@@ -68,7 +68,7 @@ export interface StudyMaterial {
   exam_id?: string;
   subject_id?: string;
   topic_id?: string;
-  type: MaterialType;
+  material_type: MaterialType;
   file_url: string;
   download_count: number;
   created_at: string;
@@ -152,8 +152,12 @@ export interface ExamScoreSubmission {
   user_id: string;
   exam_id: string;
   marks_obtained: number;
+  category_id: string;
+  category_name?: string;
   category: string;
-  status: VerificationStatus;
+  verification_status: VerificationStatus;
+  total_marks_of_exam?: number;
+  exam_name?: string;
   notes?: string;
   submitted_at: string;
   user?: { full_name: string; username: string };
@@ -215,6 +219,7 @@ export interface CutoffResponse {
   is_official: boolean;
   estimates?: CutoffEstimate[];
   official?: OfficialCutoff[];
+  insufficient_data_categories?: string[];
 }
 
 export enum AnnouncementType {

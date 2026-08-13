@@ -18,7 +18,7 @@ export default function RankingsPage() {
 
   // Fetch completed exams that have results
   const { data: exams, isLoading: examsLoading } = useExams();
-  const { data: categories } = useCategories(selectedExamId ? parseInt(selectedExamId) : undefined);
+  const { data: categories } = useCategories(selectedExamId || undefined);
   
   // Auto-select first exam when loaded
   React.useEffect(() => {
@@ -95,7 +95,7 @@ export default function RankingsPage() {
                   <div className="text-3xl font-bold mt-1">{myRank.percentile}%</div>
                 </div>
               </div>
-              {myRank.verification_status === 'verified' && (
+              {myRank.verification_status === 'VERIFIED' && (
                 <div className="mt-4 pt-4 border-t border-blue-700/50 flex items-center text-sm font-medium text-green-300">
                   <ArrowUpCircle className="w-4 h-4 mr-1.5" /> Your score has been verified by administrators.
                 </div>
@@ -200,7 +200,7 @@ export default function RankingsPage() {
                         </td>
                         <td className="px-6 py-4 font-mono text-gray-600 dark:text-gray-300">
                           {entry.masked_username}
-                          {entry.verification_status === 'verified' && (
+                          {entry.verification_status === 'VERIFIED' && (
                             <Badge variant="green" className="ml-2 scale-75 origin-left">Verified</Badge>
                           )}
                         </td>

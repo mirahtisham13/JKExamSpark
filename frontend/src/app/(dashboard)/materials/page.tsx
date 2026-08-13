@@ -14,9 +14,9 @@ import { toast } from 'react-hot-toast';
 
 export default function StudentMaterialsPage() {
   const [filters, setFilters] = useState({
-    exam_id: undefined as number | undefined,
-    subject_id: undefined as number | undefined,
-    topic_id: undefined as number | undefined,
+    exam_id: undefined as string | undefined,
+    subject_id: undefined as string | undefined,
+    topic_id: undefined as string | undefined,
     search: '',
   });
 
@@ -26,9 +26,9 @@ export default function StudentMaterialsPage() {
   const { data: topics, isLoading: topicsLoading } = useTopics(filters.subject_id);
   
   const { mutateAsync: downloadMaterial } = useDownloadMaterial();
-  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
-  const handleDownload = async (id: number) => {
+  const handleDownload = async (id: string) => {
     try {
       setDownloadingId(id);
       const res = await downloadMaterial(id);
@@ -44,9 +44,9 @@ export default function StudentMaterialsPage() {
 
   const getIconForType = (type: string) => {
     switch (type) {
-      case 'pdf': return <FileText className="h-8 w-8 text-red-500 mb-3" />;
-      case 'image': return <ImageIcon className="h-8 w-8 text-blue-500 mb-3" />;
-      case 'external': return <ExternalLink className="h-8 w-8 text-green-500 mb-3" />;
+      case 'PDF': return <FileText className="h-8 w-8 text-red-500 mb-3" />;
+      case 'VIDEO': return <ImageIcon className="h-8 w-8 text-blue-500 mb-3" />;
+      case 'LINK': return <ExternalLink className="h-8 w-8 text-green-500 mb-3" />;
       default: return <FileText className="h-8 w-8 text-gray-500 mb-3" />;
     }
   };
@@ -66,14 +66,14 @@ export default function StudentMaterialsPage() {
             <Select 
               label="Exam" 
               value={filters.exam_id || ''}
-              onChange={(e) => setFilters(prev => ({ ...prev, exam_id: e.target.value ? Number(e.target.value) : undefined, subject_id: undefined, topic_id: undefined }))}
+              onChange={(e) => setFilters(prev => ({ ...prev, exam_id: e.target.value || undefined, subject_id: undefined, topic_id: undefined }))}
               options={exams ? [{label: 'All Exams', value: ''}, ...exams.map(e => ({ label: e.name, value: e.id }))] : []}
             />
             
             <Select 
               label="Subject" 
               value={filters.subject_id || ''}
-              onChange={(e) => setFilters(prev => ({ ...prev, subject_id: e.target.value ? Number(e.target.value) : undefined, topic_id: undefined }))}
+              onChange={(e) => setFilters(prev => ({ ...prev, subject_id: e.target.value || undefined, topic_id: undefined }))}
               options={subjects ? [{label: 'All Subjects', value: ''}, ...subjects.map(s => ({ label: s.name, value: s.id }))] : []}
               disabled={!filters.exam_id || subjectsLoading}
             />
@@ -81,7 +81,7 @@ export default function StudentMaterialsPage() {
             <Select 
               label="Topic" 
               value={filters.topic_id || ''}
-              onChange={(e) => setFilters(prev => ({ ...prev, topic_id: e.target.value ? Number(e.target.value) : undefined }))}
+              onChange={(e) => setFilters(prev => ({ ...prev, topic_id: e.target.value || undefined }))}
               options={topics ? [{label: 'All Topics', value: ''}, ...topics.map(t => ({ label: t.name, value: t.id }))] : []}
               disabled={!filters.subject_id || topicsLoading}
             />
@@ -131,8 +131,8 @@ export default function StudentMaterialsPage() {
                 <div className="p-5 flex-1">
                   <div className="flex justify-between items-start">
                     {getIconForType(mat.material_type)}
-                    <Badge variant={mat.material_type === 'pdf' ? 'red' : mat.material_type === 'external' ? 'green' : 'blue'}>
-                      {mat.material_type.toUpperCase()}
+                    <Badge variant={mat.material_type === 'PDF' ? 'red' : mat.material_type === 'LINK' ? 'green' : 'blue'}>
+                      {mat.material_type}
                     </Badge>
                   </div>
                   <h3 className="font-bold text-lg leading-tight mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors line-clamp-2">
@@ -153,11 +153,11 @@ export default function StudentMaterialsPage() {
                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50">
                   <Button 
                     className="w-full" 
-                    variant={mat.material_type === 'external' ? 'secondary' : 'primary'}
+                    variant={mat.material_type === 'LINK' ? 'secondary' : 'primary'}
                     isLoading={downloadingId === mat.id}
                     onClick={() => handleDownload(mat.id)}
                   >
-                    {mat.material_type === 'external' ? (
+                    {mat.material_type === 'LINK' ? (
                       <><ExternalLink className="w-4 h-4 mr-2" /> Open Link</>
                     ) : (
                       <><Download className="w-4 h-4 mr-2" /> Download</>
