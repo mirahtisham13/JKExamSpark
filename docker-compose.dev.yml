@@ -1,0 +1,27 @@
+version: "3.9"
+
+# Dev overrides: hot reload, source mounts, debug mode
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./backend:/app
+      - /app/.venv  # preserve the venv inside container
+    environment:
+      - DEBUG=true
+      - ENVIRONMENT=development
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # preserve node_modules inside container
+      - /app/.next         # preserve .next inside container
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
