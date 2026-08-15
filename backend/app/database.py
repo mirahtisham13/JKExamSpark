@@ -4,6 +4,8 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.pool import StaticPool
 from .config import settings
 
+import uuid
+
 is_sqlite = settings.database_url.startswith("sqlite")
 
 engine_kwargs = {"echo": settings.debug}
@@ -16,7 +18,8 @@ else:
     # Required for Supabase PgBouncer (transaction pool mode)
     engine_kwargs.update({
         "connect_args": {
-            "prepared_statement_cache_size": 0
+            "statement_cache_size": 0,
+            "prepared_statement_name_func": lambda: f"__asyncpg_{uuid.uuid4()}__"
         }
     })
 
