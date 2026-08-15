@@ -12,6 +12,13 @@ if is_sqlite:
         "connect_args": {"check_same_thread": False},
         "poolclass": StaticPool
     })
+else:
+    # Required for Supabase PgBouncer (transaction pool mode)
+    engine_kwargs.update({
+        "connect_args": {
+            "prepared_statement_cache_size": 0
+        }
+    })
 
 engine = create_async_engine(settings.database_url, **engine_kwargs)
 
