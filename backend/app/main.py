@@ -31,13 +31,7 @@ async def lifespan(app: FastAPI):
     # Shutdown (cleanup if needed)
 
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok", "db_url": settings.database_url}
 
-@app.get("/")
-def root():
-    return {"message": "Welcome to JKExamSpark API"}
 
 
 app = FastAPI(
