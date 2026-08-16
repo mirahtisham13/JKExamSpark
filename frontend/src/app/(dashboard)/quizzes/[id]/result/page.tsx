@@ -14,7 +14,7 @@ export default function QuizResultPage() {
   const searchParams = useSearchParams();
   const attemptId = searchParams.get('attempt_id');
 
-  const { data: result, isLoading } = useAttemptDetails(attemptId as string);
+  const { data: result, isLoading } = useAttemptDetails(Number(attemptId));
 
   if (isLoading) return <div className="flex justify-center items-center min-h-screen"><Spinner size="lg" /></div>;
   if (!result) return <div className="text-center py-20 text-xl font-bold">Result not found</div>;

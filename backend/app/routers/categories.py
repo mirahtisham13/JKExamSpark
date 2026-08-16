@@ -23,14 +23,22 @@ async def create_category(
     db: AsyncSession = Depends(get_db),
     current_user=Depends(require_admin),
 ):
-    existing = await db.execute(select(Category).where(Category.code == data.code))
-    if existing.scalar_one_or_none():
-        raise ConflictException(f"Category with code '{data.code}' already exists")
-    cat = Category(**data.model_dump())
-    db.add(cat)
-    await db.commit()
-    await db.refresh(cat)
-    return cat
+    try:
+        existing = await db.execute(select(Category).where(Category.code == data.code))
+        if existing.scalar_one_or_none():
+            raise ConflictException(f"Category with code '{data.code}' already exists")
+        cat = Category(**data.model_dump())
+        db.add(cat)
+        await db.commit()
+        await db.refresh(cat)
+        return cat
+    except Exception as e:
+        print("====== ERROR IN CREATE CATEGORY ======")
+        print(type(e))
+        print(e)
+        import traceback
+        traceback.print_exc()
+        raise e
 
 
 @router.put("/{cat_id}", response_model=CategoryPublic)

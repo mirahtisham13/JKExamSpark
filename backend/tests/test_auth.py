@@ -112,7 +112,7 @@ async def test_logout_revokes_token(client: AsyncClient, test_student):
 @pytest.mark.asyncio
 async def test_access_protected_without_token(client: AsyncClient):
     response = await client.get("/api/v1/users/profile")
-    assert response.status_code == 403  # No auth header
+    assert response.status_code == 401  # No auth header
 
 
 @pytest.mark.asyncio

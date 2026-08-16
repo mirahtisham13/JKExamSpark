@@ -11,8 +11,8 @@ import { toast } from 'react-hot-toast';
 export default function QuizAttemptPage() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const quizId = params.id as string;
-  const attemptId = searchParams.get('attempt_id');
+  const quizId = Number(params.id);
+  const attemptId = Number(searchParams.get('attempt_id'));
   const router = useRouter();
 
   const { data: quiz, isLoading: isQuizLoading } = useQuizDetails(quizId);

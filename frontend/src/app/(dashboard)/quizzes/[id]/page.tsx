@@ -11,7 +11,7 @@ import { useQuizDetails, useStartAttempt } from '@/hooks/useQuiz';
 
 export default function QuizDetailsPage() {
   const params = useParams();
-  const quizId = params.id as string;
+  const quizId = Number(params.id);
   const router = useRouter();
 
   const { data: quiz, isLoading } = useQuizDetails(quizId);

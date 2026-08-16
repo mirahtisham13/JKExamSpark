@@ -27,9 +27,9 @@ export default function RankingsPage() {
     }
   }, [exams, selectedExamId]);
 
-  const { data: leaderboard, isLoading: boardLoading } = useLeaderboard(selectedExamId, selectedCategoryId || undefined, page);
-  const { data: myRank, isLoading: myRankLoading } = useMyRank(selectedExamId);
-  const { data: stats, isLoading: statsLoading } = useRankingStats(selectedExamId);
+  const { data: leaderboard, isLoading: boardLoading } = useLeaderboard(selectedExamId as string, selectedCategoryId || undefined, page);
+  const { data: myRank, isLoading: myRankLoading } = useMyRank(selectedExamId as string);
+  const { data: stats, isLoading: statsLoading } = useRankingStats(selectedExamId as string);
 
   if (examsLoading) {
     return <div className="p-12"><Spinner /></div>;

@@ -13,7 +13,7 @@ export default function StudentQuizzesPage() {
   const [search, setSearch] = useState("");
   const { data: quizzes, isLoading } = useStudentQuizzes();
 
-  const filteredQuizzes = quizzes?.filter(q => q.title.toLowerCase().includes(search.toLowerCase())) || [];
+  const filteredQuizzes = quizzes?.filter((q: any) => q.title.toLowerCase().includes(search.toLowerCase())) || [];
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6 min-h-screen">
@@ -58,7 +58,7 @@ export default function StudentQuizzesPage() {
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredQuizzes.map((quiz) => (
+            {filteredQuizzes.map((quiz: any) => (
               <div 
                 key={quiz.id} 
                 className="group flex flex-col bg-card-light dark:bg-card-dark rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"

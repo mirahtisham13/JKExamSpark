@@ -1,31 +1,22 @@
-import React from 'react';
-import { cn } from './Button';
+import { cn } from '@/lib/utils';
 
-interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'blue' | 'green' | 'red' | 'yellow' | 'gray' | 'purple' | 'amber';
+interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'blue' | 'green' | 'red' | 'yellow' | 'gray' | 'purple';
 }
 
-export function Badge({ children, variant = 'gray', className, ...props }: BadgeProps) {
+export function Badge({ className, variant = 'gray', children, ...props }: BadgeProps) {
   const variants = {
-    blue: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-    green: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-    red: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-    yellow: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+    blue: 'bg-primary/10 text-primary',
+    green: 'bg-success/10 text-success',
+    red: 'bg-danger/10 text-danger',
+    yellow: 'bg-accent/10 text-accent',
     gray: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
     purple: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
-    amber: 'bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent',
   };
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold",
-        variants[variant],
-        className
-      )}
-      {...props}
-    >
+    <div className={cn('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none', variants[variant], className)} {...props}>
       {children}
-    </span>
+    </div>
   );
 }

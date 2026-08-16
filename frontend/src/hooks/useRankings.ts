@@ -1,27 +1,50 @@
 import { useQuery } from '@tanstack/react-query';
-import { get } from '../lib/api';
-import { PaginatedResponse, RankingEntry, UserRankingResult, RankingStats } from '../types';
+import api from '@/lib/api';
 
-export function useLeaderboard(examId: string | null, categoryId?: string, page: number = 1) {
+export const useRankings = (examId: string, category?: string, page: number = 1) => {
   return useQuery({
-    queryKey: ['leaderboard', examId, categoryId, page],
-    queryFn: () => get<PaginatedResponse<RankingEntry>>(`/rankings/${examId}`, { category_id: categoryId, page, size: 50 }),
-    enabled: !!examId,
+    queryKey: ['rankings', examId, category],
+    queryFn: async () => {
+      const { data } = await api.get(`/rankings/${examId}`, {
+        params: { category, page }
+      });
+      return data;
+    },
+    enabled: !!examId
   });
-}
+};
 
-export function useMyRank(examId: string | null) {
+export const useLeaderboard = (examId: string, category?: string, page: number = 1) => {
+  return useQuery({
+    queryKey: ['leaderboard', examId, category, page],
+    queryFn: async () => {
+      const { data } = await api.get(`/rankings/${examId}/leaderboard`, {
+        params: { category, page }
+      });
+      return data;
+    },
+    enabled: !!examId
+  });
+};
+
+export const useMyRank = (examId: string) => {
   return useQuery({
     queryKey: ['my-rank', examId],
-    queryFn: () => get<UserRankingResult>(`/rankings/${examId}/my-rank`),
-    enabled: !!examId,
+    queryFn: async () => {
+      const { data } = await api.get(`/rankings/${examId}/my-rank`);
+      return data;
+    },
+    enabled: !!examId
   });
-}
+};
 
-export function useRankingStats(examId: string | null) {
+export const useRankingStats = (examId: string) => {
   return useQuery({
     queryKey: ['ranking-stats', examId],
-    queryFn: () => get<RankingStats>(`/rankings/${examId}/stats`),
-    enabled: !!examId,
+    queryFn: async () => {
+      const { data } = await api.get(`/rankings/${examId}/stats`);
+      return data;
+    },
+    enabled: !!examId
   });
-}
+};

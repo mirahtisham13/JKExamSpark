@@ -12,14 +12,19 @@ from app.models import (User, RefreshToken, Category, Exam, ExamCategory,
                          QuizAttempt, QuizAnswer, ExamScoreSubmission,
                          ScoreEditHistory, CutoffEstimate, OfficialCutoff, Announcement)
 from app.database import Base
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # this is the Alembic Config object
 config = context.config
 
-# Override DB URL from environment
-db_url = os.getenv("DATABASE_URL_SYNC", os.getenv("DATABASE_URL", ""))
+# Override DB URL from environment (needs async URL for async_engine_from_config)
+db_url = os.getenv("DATABASE_URL", "")
 if db_url:
-    config.set_main_option("sqlalchemy.url", db_url)
+    # Escape '%' for configparser interpolation
+    escaped_url = db_url.replace('%', '%%')
+    config.set_main_option("sqlalchemy.url", escaped_url)
 
 # Interpret the config file for Python logging.
 if config.config_file_name is not None:

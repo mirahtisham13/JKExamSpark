@@ -1,32 +1,35 @@
-import React from 'react';
-import { cn } from './Button';
+import { InputHTMLAttributes, forwardRef } from 'react';
+import { cn } from '@/lib/utils';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  helperText?: string;
+  icon?: React.ReactNode;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, label, error, helperText, icon, ...props }, ref) => {
     return (
       <div className="w-full">
-        {label && (
-          <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-            {label}
-          </label>
-        )}
-        <input
-          className={cn(
-            "flex h-10 w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 transition-colors",
-            error && "border-danger focus:ring-danger",
-            className
-          )}
-          ref={ref}
-          {...props}
-        />
+        {label && <label className="block text-sm font-medium mb-1">{label}</label>}
+        <div className="relative">
+          {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">{icon}</div>}
+          <input
+            ref={ref}
+            className={cn(
+              'flex w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700',
+              icon && 'pl-10',
+              error && 'border-danger focus:ring-danger',
+              className
+            )}
+            {...props}
+          />
+        </div>
         {error && <p className="mt-1 text-sm text-danger">{error}</p>}
+        {helperText && !error && <p className="mt-1 text-sm text-gray-500">{helperText}</p>}
       </div>
     );
   }
 );
-Input.displayName = "Input";
+Input.displayName = 'Input';
