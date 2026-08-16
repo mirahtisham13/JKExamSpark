@@ -10,7 +10,7 @@ export function Sidebar({ open }: { open: boolean }) {
   const isAdmin = user?.role === 'ADMIN';
 
   const studentLinks = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/exams', label: 'Exams', icon: FileText },
     { href: '/materials', label: 'Study Materials', icon: BookOpen },
     { href: '/quizzes', label: 'Quizzes', icon: CheckSquare },

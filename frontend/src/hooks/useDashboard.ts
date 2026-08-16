@@ -2,10 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { get } from '../lib/api';
 import { StudentDashboardResponse } from '../types';
 
-export function useStudentDashboard() {
+export function useStudentDashboard(enabled: boolean = true) {
   return useQuery({
     queryKey: ['student-dashboard'],
     queryFn: () => get<StudentDashboardResponse>('/dashboard/student'),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled,
+    retry: false
   });
 }
