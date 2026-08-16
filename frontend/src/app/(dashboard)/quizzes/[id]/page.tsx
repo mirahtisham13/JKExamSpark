@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { Badge } from '@/components/ui/Badge';
 import { useQuizDetails, useStartAttempt } from '@/hooks/useQuiz';
+import { useAuthStore } from '@/store/auth';
 
 export default function QuizDetailsPage() {
   const params = useParams();
@@ -16,8 +17,14 @@ export default function QuizDetailsPage() {
 
   const { data: quiz, isLoading } = useQuizDetails(quizId);
   const { mutateAsync: startAttempt, isPending: isStarting } = useStartAttempt();
+  const { user } = useAuthStore();
 
   const handleStart = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    
     try {
       const attempt = await startAttempt(quizId);
       router.push(`/quizzes/${quizId}/attempt?attempt_id=${attempt.id}`);

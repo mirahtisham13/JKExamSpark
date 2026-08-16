@@ -25,7 +25,6 @@ async def list_materials(
     material_type: Optional[MaterialType] = Query(None),
     search: Optional[str] = Query(None),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     query = select(StudyMaterial).where(
         StudyMaterial.deleted_at.is_(None),
@@ -49,7 +48,6 @@ async def list_materials(
 async def get_material(
     material_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     result = await db.execute(
         select(StudyMaterial).where(
@@ -67,7 +65,6 @@ async def get_material(
 async def download_material(
     material_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     result = await db.execute(
         select(StudyMaterial).where(

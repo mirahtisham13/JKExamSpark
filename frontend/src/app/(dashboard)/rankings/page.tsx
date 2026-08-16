@@ -10,6 +10,8 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Badge } from '@/components/ui/Badge';
 import { Exam } from '@/types';
 import { useExams, useCategories } from '@/hooks/useTaxonomy';
+import { useAuthStore } from '@/store/auth';
+import Link from 'next/link';
 
 export default function RankingsPage() {
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
@@ -27,8 +29,9 @@ export default function RankingsPage() {
     }
   }, [exams, selectedExamId]);
 
+  const { user } = useAuthStore();
   const { data: leaderboard, isLoading: boardLoading } = useLeaderboard(selectedExamId as string, selectedCategoryId || undefined, page);
-  const { data: myRank, isLoading: myRankLoading } = useMyRank(selectedExamId as string);
+  const { data: myRank, isLoading: myRankLoading } = useMyRank(selectedExamId as string, !!user);
   const { data: stats, isLoading: statsLoading } = useRankingStats(selectedExamId as string);
 
   if (examsLoading) {
@@ -67,7 +70,13 @@ export default function RankingsPage() {
         <div className="space-y-6">
           
           {/* My Ranking Highlight Card */}
-          {myRankLoading ? (
+          {!user ? (
+            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-100 dark:border-gray-800 text-center">
+              <h3 className="font-semibold text-lg mb-2">Log in to view your rank</h3>
+              <p className="text-gray-500 mb-4">You need to be logged in to see your personalized ranking.</p>
+              <Link href="/login" className="text-primary hover:underline font-medium">Log In Here &rarr;</Link>
+            </div>
+          ) : myRankLoading ? (
             <div className="bg-card-light dark:bg-card-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 flex justify-center"><Spinner /></div>
           ) : myRank ? (
             <div className="bg-gradient-to-r from-primary to-blue-800 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
@@ -105,7 +114,7 @@ export default function RankingsPage() {
             <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-100 dark:border-gray-800 text-center">
               <h3 className="font-semibold text-lg mb-2">You haven't submitted a score for this exam</h3>
               <p className="text-gray-500 mb-4">Submit your actual exam score to see your ranking and percentile.</p>
-              <a href="/my-scores" className="text-primary hover:underline font-medium">Go to My Scores &rarr;</a>
+              <Link href="/my-scores" className="text-primary hover:underline font-medium">Go to My Scores &rarr;</Link>
             </div>
           )}
 

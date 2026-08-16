@@ -18,7 +18,6 @@ async def list_quizzes(
     exam_id: Optional[int] = Query(None),
     subject_id: Optional[int] = Query(None),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     query = select(Quiz).where(Quiz.status == QuizStatus.published)
     if exam_id:
@@ -45,7 +44,6 @@ async def list_quizzes(
 async def get_quiz(
     quiz_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     result = await db.execute(select(Quiz).where(Quiz.id == quiz_id, Quiz.status == QuizStatus.published))
     quiz = result.scalar_one_or_none()

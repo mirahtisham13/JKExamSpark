@@ -27,14 +27,14 @@ export const useLeaderboard = (examId: string, category?: string, page: number =
   });
 };
 
-export const useMyRank = (examId: string) => {
+export const useMyRank = (examId: string, isAuthenticated: boolean = true) => {
   return useQuery({
     queryKey: ['my-rank', examId],
     queryFn: async () => {
       const { data } = await api.get(`/rankings/${examId}/my-rank`);
       return data;
     },
-    enabled: !!examId
+    enabled: !!examId && isAuthenticated
   });
 };
 

@@ -17,7 +17,6 @@ router = APIRouter(prefix="/cutoffs", tags=["cutoffs"])
 async def get_exam_cutoffs(
     exam_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     """
     Get cutoffs for an exam — both official (admin-published) and estimated (from student submissions).

@@ -17,7 +17,6 @@ topics_router = APIRouter(prefix="/topics", tags=["topics"])
 async def list_subjects(
     exam_id: Optional[int] = Query(None),
     db: AsyncSession = Depends(get_db),
-    current_user=Depends(get_current_active_user),
 ):
     query = select(Subject)
     if exam_id:
@@ -62,7 +61,6 @@ async def update_subject(
 async def list_topics(
     subject_id: Optional[int] = Query(None),
     db: AsyncSession = Depends(get_db),
-    current_user=Depends(get_current_active_user),
 ):
     query = select(Topic)
     if subject_id:

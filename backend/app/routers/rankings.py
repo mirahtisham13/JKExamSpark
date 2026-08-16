@@ -18,7 +18,6 @@ async def leaderboard(
     page: int = Query(1, ge=1),
     size: int = Query(50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     """
     Leaderboard based exclusively on actual exam scores.
@@ -42,6 +41,5 @@ async def my_rank(
 async def ranking_stats(
     exam_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     return await get_ranking_stats(db, exam_id)
