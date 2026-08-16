@@ -11,11 +11,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, children, disabled, ...props }, ref) => {
     const variants = {
-      primary: 'bg-primary text-white hover:bg-primary-light',
-      secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700',
-      danger: 'bg-danger text-white hover:bg-red-600',
-      ghost: 'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300',
-      outline: 'border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800',
+      primary: 'bg-gradient-to-r from-primary to-primary-dark text-white hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-95',
+      secondary: 'bg-white text-gray-900 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm dark:bg-card-dark dark:text-white dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800 active:scale-95',
+      danger: 'bg-gradient-to-r from-danger to-red-600 text-white hover:shadow-lg hover:shadow-danger/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-95',
+      ghost: 'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-700 dark:text-gray-300 active:scale-95',
+      outline: 'border-2 border-primary/20 text-primary hover:border-primary hover:bg-primary/5 dark:border-primary/30 dark:text-primary-light dark:hover:border-primary-light dark:hover:bg-primary-light/10 active:scale-95',
     };
     
     const sizes = {

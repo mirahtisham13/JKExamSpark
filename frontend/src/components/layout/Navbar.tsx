@@ -8,8 +8,8 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="h-16 bg-card-light dark:bg-card-dark border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-6 z-20 sticky top-0">
-      <button onClick={onMenuClick} className="md:hidden">
+    <header className="h-16 bg-white/80 dark:bg-card-dark/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 flex items-center justify-between px-6 z-20 sticky top-0 transition-colors">
+      <button onClick={onMenuClick} className="md:hidden text-gray-500 hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded-md p-1">
         <Menu className="w-6 h-6" />
       </button>
       <div className="flex-1"></div>

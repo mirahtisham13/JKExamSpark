@@ -32,9 +32,9 @@ export function Sidebar({ open }: { open: boolean }) {
   const links = isAdmin ? adminLinks : studentLinks;
 
   return (
-    <div className={`fixed inset-y-0 left-0 transform ${open ? 'translate-x-0' : '-translate-x-full'} w-64 bg-card-light dark:bg-card-dark border-r border-gray-200 dark:border-gray-800 transition-transform duration-200 ease-in-out z-30 md:relative md:translate-x-0`}>
+    <div className={`fixed inset-y-0 left-0 transform ${open ? 'translate-x-0' : '-translate-x-full'} w-64 bg-white dark:bg-card-dark border-r border-gray-200/50 dark:border-gray-800/50 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-30 md:relative md:translate-x-0 shadow-lg md:shadow-none`}>
       <div className="p-6">
-        <Link href="/" className="text-2xl font-bold text-primary dark:text-white">JKExamSpark</Link>
+        <Link href="/" className="text-2xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent tracking-tight">JKExamSpark</Link>
       </div>
       <nav className="mt-6 px-4 space-y-2">
         {links.map(link => {
@@ -43,7 +43,7 @@ export function Sidebar({ open }: { open: boolean }) {
             <Link 
               key={link.href} 
               href={link.href} 
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-white font-medium' : 'text-text-muted hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-white'}`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive ? 'bg-gradient-to-r from-primary/10 to-transparent text-primary dark:from-primary/20 dark:to-transparent dark:text-primary-light font-bold shadow-[inset_4px_0_0_0_rgba(14,165,233,1)]' : 'text-text-muted hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-gray-100 hover:translate-x-1'}`}
             >
               <link.icon className="w-5 h-5" />
               {link.label}

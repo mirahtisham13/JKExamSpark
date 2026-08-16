@@ -3,7 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background-light text-text-primary-light dark:bg-background-dark dark:text-text-primary-dark font-inter antialiased transition-colors duration-200;
+    @apply bg-background-light text-text-primary-light dark:bg-background-dark dark:text-text-primary-dark font-inter antialiased transition-colors duration-200 selection:bg-primary selection:text-white;
+  }
+
+  /* Accessible focus defaults */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark;
   }
 }
