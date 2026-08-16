@@ -21,8 +21,8 @@ export default function Page() {
             Join thousands of JKSSB aspirants. Prepare with quizzes, study materials, track real exam scores, and view category-wise rankings.
           </p>
           <div className="flex justify-center gap-4 pt-4">
-            <Link href="/login" className="px-8 py-3 bg-primary text-white rounded-md text-lg font-medium hover:bg-primary-light transition-colors">Start Preparing</Link>
-            <Link href="/register" className="px-8 py-3 bg-card-light dark:bg-card-dark text-primary dark:text-white border border-gray-200 dark:border-gray-800 rounded-md text-lg font-medium hover:opacity-80 transition-opacity">Register Free</Link>
+            <Link href="/quizzes" className="px-8 py-3 bg-primary text-white rounded-md text-lg font-medium hover:bg-primary-light transition-colors">Start Preparing</Link>
+            <Link href="/rankings" className="px-8 py-3 bg-card-light dark:bg-card-dark text-primary dark:text-white border border-gray-200 dark:border-gray-800 rounded-md text-lg font-medium hover:opacity-80 transition-opacity">View Rankings</Link>
           </div>
           <p className="text-sm text-text-muted mt-8 max-w-md mx-auto">
             Disclaimer: Rankings are based on self-submitted student data. Not affiliated with JKSSB.
