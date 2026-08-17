@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Trophy, FileText, Target, BookOpen, Clock, ChevronRight, Bell, AlertCircle, ArrowUpRight } from 'lucide-react';
 import { useStudentDashboard } from '@/hooks/useDashboard';
 import { useAuthStore } from '@/store/auth';
+import { useExams } from '@/hooks/useExams';
 import { Spinner } from '@/components/ui/Spinner';
 import { Badge } from '@/components/ui/Badge';
 import { formatScore, formatDate } from '@/lib/utils';
@@ -12,6 +13,7 @@ import { formatScore, formatDate } from '@/lib/utils';
 export default function DashboardPage() {
   const { user } = useAuthStore();
   const { data: dashboard, isLoading, error } = useStudentDashboard(!!user);
+  const { data: exams, isLoading: isLoadingExams } = useExams();
 
   return (
     <div className="p-4 sm:p-6 space-y-8 max-w-7xl mx-auto">
@@ -129,36 +131,44 @@ export default function DashboardPage() {
         {/* Left Column (Spans 2) */}
         <div className="lg:col-span-2 space-y-6">
           
-          {/* Active Exams (Logged in only for now, since it relies on dashboard data) */}
-          {user && dashboard && (
-            <div className="bg-white dark:bg-card-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
-              <div className="p-5 border-b border-gray-50 dark:border-gray-800 flex justify-between items-center">
-                <h2 className="text-lg font-bold flex items-center">
-                  <Target className="w-5 h-5 mr-2 text-primary" /> Active Exams
-                </h2>
-                <Link href="/exams" className="text-sm text-primary hover:underline flex items-center">
-                  View all <ChevronRight className="w-4 h-4 ml-0.5" />
-                </Link>
-              </div>
-              <div className="divide-y divide-gray-50 dark:divide-gray-800">
-                {dashboard.active_exams.length === 0 ? (
-                  <div className="p-6 text-center text-gray-500">No active exams right now.</div>
-                ) : (
-                  dashboard.active_exams.map(exam => (
-                    <div key={exam.id} className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                      <div>
-                        <div className="font-semibold text-gray-900 dark:text-gray-100">{exam.name}</div>
-                        <div className="text-sm text-gray-500 mt-1">{exam.year} • {exam.total_marks} Marks</div>
-                      </div>
-                      <Link href="/exams" className="px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 rounded-md text-sm font-medium transition-colors">
-                        Details
-                      </Link>
-                    </div>
-                  ))
-                )}
-              </div>
+          {/* Exams Listing (Public to all) */}
+          <div className="bg-white dark:bg-card-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+            <div className="p-5 border-b border-gray-50 dark:border-gray-800 flex justify-between items-center">
+              <h2 className="text-lg font-bold flex items-center">
+                <Target className="w-5 h-5 mr-2 text-primary" /> Available Exams
+              </h2>
+              <Link href="/exams" className="text-sm text-primary hover:underline flex items-center">
+                View all <ChevronRight className="w-4 h-4 ml-0.5" />
+              </Link>
             </div>
-          )}
+            <div className="divide-y divide-gray-50 dark:divide-gray-800">
+              {isLoadingExams ? (
+                <div className="p-10 flex justify-center"><Spinner /></div>
+              ) : !exams || exams.length === 0 ? (
+                <div className="p-6 text-center text-gray-500">No exams available right now.</div>
+              ) : (
+                exams.slice(0, 5).map(exam => (
+                  <div key={exam.id} className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div>
+                      <div className="font-semibold text-gray-900 dark:text-gray-100">{exam.name}</div>
+                      <div className="flex items-center space-x-2 text-sm text-gray-500 mt-1">
+                        <span>{exam.year}</span>
+                        <span>•</span>
+                        <span>{exam.total_marks} Marks</span>
+                        <span>•</span>
+                        <Badge variant={exam.status === 'UPCOMING' ? 'blue' : exam.status === 'ACTIVE' ? 'green' : 'gray'} className="text-[10px]">
+                          {exam.status}
+                        </Badge>
+                      </div>
+                    </div>
+                    <Link href={`/exams/${exam.id}`} className="px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 rounded-md text-sm font-medium transition-colors">
+                      View Details
+                    </Link>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
           
           {/* Recent Submissions (Logged in only) */}
           {user && dashboard && (

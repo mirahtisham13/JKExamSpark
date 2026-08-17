@@ -27,26 +27,43 @@ export interface Exam {
   notification_number?: string;
   exam_date?: string;
   total_marks: number;
+  total_vacancies: number;
+  official_difficulty?: string;
+  total_candidates_estimate?: number;
   status: ExamStatus;
   created_at: string;
-}
-
-export interface ExamCategory {
-  id: string;
-  exam_id: string;
-  category_name: string;
-  vacancies: number;
 }
 
 export interface Category {
   id: string;
   name: string;
+  code: string;
   description?: string;
+  is_active: boolean;
+}
+
+export interface ExamCategory {
+  id: string;
+  exam_id: string;
+  category_id: string;
+  category: Category;
+  vacancies?: number;
+  official_cutoff?: number;
+  official_cutoff_published_at?: string;
 }
 
 export interface Subject {
   id: string;
   name: string;
+  code?: string;
+  exam_id: string;
+  description?: string;
+  order: number;
+}
+
+export interface ExamDetail extends Exam {
+  exam_categories: ExamCategory[];
+  subjects: Subject[];
 }
 
 export interface Topic {
